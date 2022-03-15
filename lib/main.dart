@@ -14,8 +14,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Great Places',
       theme: ThemeData(
-        primarySwatch: Colors.indigo,
-        accentColor: Colors.amber,
+        colorScheme: ThemeData().colorScheme.copyWith(
+              secondary: Colors.amber,
+              primary: Colors.indigo,
+            ),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: PlacesListScreen(),
