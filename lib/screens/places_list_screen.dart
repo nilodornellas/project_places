@@ -18,22 +18,28 @@ class PlacesListScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Consumer<GreatPlaces>(
-        child: Center(
-          child: Text('Nenhum local cadastrado!'),
-        ),
-        builder: (ctx, greatePlaces, ch) => greatePlaces.itemsCount == 0
-            ? ch!
-            : ListView.builder(
-                itemCount: greatePlaces.itemsCount,
-                itemBuilder: (ctx, index) => ListTile(
-                  leading: CircleAvatar(
-                    backgroundImage:
-                        FileImage(greatePlaces.itemByIndex(index).image),
-                  ),
-                  title: Text(greatePlaces.itemByIndex(index).title),
-                  onTap: () {},
+      body: FutureBuilder(
+        future: Provider.of<GreatPlaces>(context, listen: false).loadPlaces(),
+        builder: (ctx, snapshot) => snapshot.connectionState ==
+                ConnectionState.waiting
+            ? Center(child: CircularProgressIndicator())
+            : Consumer<GreatPlaces>(
+                child: Center(
+                  child: Text('Nenhum local cadastrado!'),
                 ),
+                builder: (ctx, greatePlaces, ch) => greatePlaces.itemsCount == 0
+                    ? ch!
+                    : ListView.builder(
+                        itemCount: greatePlaces.itemsCount,
+                        itemBuilder: (ctx, index) => ListTile(
+                          leading: CircleAvatar(
+                            backgroundImage: FileImage(
+                                greatePlaces.itemByIndex(index).image),
+                          ),
+                          title: Text(greatePlaces.itemByIndex(index).title),
+                          onTap: () {},
+                        ),
+                      ),
               ),
       ),
     );
