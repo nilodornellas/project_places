@@ -30,6 +30,16 @@ class _MapScreenState extends State<MapScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Selecione...'),
+        actions: [
+          !widget.isReadOnly
+              ? IconButton(
+                  onPressed: _pickedPosition == null
+                      ? null
+                      : () => Navigator.of(context).pop(_pickedPosition),
+                  icon: Icon(Icons.check),
+                )
+              : Container(),
+        ],
       ),
       body: GoogleMap(
         initialCameraPosition: CameraPosition(
@@ -40,12 +50,13 @@ class _MapScreenState extends State<MapScreen> {
           zoom: 13,
         ),
         onTap: widget.isReadOnly ? null : _selectPosition,
-        markers: _pickedPosition == null
+        markers: (_pickedPosition == null && !widget.isReadOnly)
             ? Set()
             : {
                 Marker(
                   markerId: MarkerId('p1'),
-                  position: _pickedPosition!,
+                  position:
+                      _pickedPosition ?? widget.initialLocation.toLatLng(),
                 )
               },
       ),
